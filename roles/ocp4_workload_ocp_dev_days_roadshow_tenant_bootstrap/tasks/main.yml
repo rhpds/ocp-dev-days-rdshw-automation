@@ -1,0 +1,15 @@
+---
+# tasks file for ocp4_workload_ocp_dev_days_roadshow_tenant_bootstrap
+
+- name: Setting up workload for user
+  ansible.builtin.debug:
+    msg: "Setting up tenant bootstrap for OCP Dev Days Roadshow"
+
+- name: Install tenant-level components
+  ansible.builtin.debug:
+    msg: "Installing tenant-level components"
+  # Add your tenant bootstrap tasks here
+
+- name: Workload tasks complete
+  ansible.builtin.debug:
+    msg: "Tenant bootstrap workload tasks completed successfully"

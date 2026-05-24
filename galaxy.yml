@@ -1,0 +1,17 @@
+---
+namespace: rhpds
+name: ocp_dev_days_roadshow
+version: 1.0.0
+readme: README.md
+authors:
+  - Red Hat GPTE
+description: OpenShift Dev Days Roadshow workload collection for cluster and tenant bootstrap
+license:
+  - Apache-2.0
+tags:
+  - openshift
+  - workload
+  - bootstrap
+  - devdays
+dependencies: {}
+repository: https://github.com/rhpds/openshift-dev-days-roadshow

@@ -1,0 +1,15 @@
+---
+# tasks file for ocp4_workload_ocp_dev_days_roadshow_cluster_bootstrap
+
+- name: Setting up workload for user
+  ansible.builtin.debug:
+    msg: "Setting up cluster bootstrap for OCP Dev Days Roadshow"
+
+- name: Install cluster-level components
+  ansible.builtin.debug:
+    msg: "Installing cluster-level components"
+  # Add your cluster bootstrap tasks here
+
+- name: Workload tasks complete
+  ansible.builtin.debug:
+    msg: "Cluster bootstrap workload tasks completed successfully"
