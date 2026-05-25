@@ -1,9 +1,0 @@
----
-# defaults file for ocp4_workload_ocp_dev_days_roadshow_cluster_bootstrap
-
-become_override: false
-ocp_username: opentlc-mgr
-silent: false
-
-# Cluster bootstrap specific variables
-ocp4_workload_ocp_dev_days_roadshow_cluster_bootstrap_name: ocp-dev-days-roadshow-cluster-bootstrap
