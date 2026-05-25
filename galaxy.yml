@@ -1,6 +1,6 @@
 ---
 namespace: rhpds
-name: ocp_dev_days_roadshow
+name: ocp_dev_days_rdshw
 version: 1.0.0
 readme: README.md
 authors:
@@ -14,4 +14,4 @@ tags:
   - bootstrap
   - devdays
 dependencies: {}
-repository: https://github.com/rhpds/openshift-dev-days-roadshow
+repository: https://github.com/rhpds/ocp-dev-days-rdshw
