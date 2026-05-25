@@ -1,5 +1,5 @@
 ---
-# tasks file for ocp4_workload_ocp_dev_days_rdshw_tenant_bootstrap
+# tasks file for ocp4_workload_dev_days_rdshw_tenant_bootstrap
 
 - name: Setting up workload for user
   ansible.builtin.debug:
