@@ -1,9 +1,0 @@
----
-# defaults file for ocp4_workload_dev_days_rdshw_tenant_bootstrap
-
-become_override: false
-ocp_username: opentlc-mgr
-silent: false
-
-# Tenant bootstrap specific variables
-ocp4_workload_dev_days_rdshw_tenant_bootstrap_name: ocp-dev-days-rdshw-tenant-bootstrap
