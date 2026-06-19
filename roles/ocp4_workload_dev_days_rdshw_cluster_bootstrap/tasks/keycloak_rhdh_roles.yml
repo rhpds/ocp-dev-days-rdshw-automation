@@ -1,0 +1,102 @@
+---
+# Assign realm-management client roles to the backstage-plugin service account
+# so the keycloakOrg catalog provider can sync users and groups.
+# This is a stopgap until the core_workloads keycloak role supports
+# serviceAccountRoles in ocp4_workload_authentication_keycloak_clients.
+
+- name: Get Keycloak admin credentials
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Secret
+    name: keycloak-initial-admin
+    namespace: keycloak
+  register: r_keycloak_admin
+  retries: 30
+  delay: 10
+  until:
+    - r_keycloak_admin.resources | length > 0
+    - r_keycloak_admin.resources[0].data.password is defined
+
+- name: Set Keycloak admin credentials
+  ansible.builtin.set_fact:
+    _keycloak_admin_user: "{{ r_keycloak_admin.resources[0].data.username | b64decode }}"
+    _keycloak_admin_pass: "{{ r_keycloak_admin.resources[0].data.password | b64decode }}"
+    _keycloak_host: "sso.{{ r_openshift_subdomain }}"
+    _keycloak_realm: "{{ ocp4_workload_authentication_keycloak_default_realm }}"
+
+- name: Get Keycloak admin token
+  ansible.builtin.uri:
+    url: "https://{{ _keycloak_host }}/realms/master/protocol/openid-connect/token"
+    method: POST
+    body_format: form-urlencoded
+    body:
+      client_id: admin-cli
+      username: "{{ _keycloak_admin_user }}"
+      password: "{{ _keycloak_admin_pass }}"
+      grant_type: password
+    validate_certs: false
+  register: r_keycloak_token
+  retries: 30
+  delay: 10
+  until: r_keycloak_token.status == 200
+
+- name: Set Keycloak token
+  ansible.builtin.set_fact:
+    _keycloak_token: "{{ r_keycloak_token.json.access_token }}"
+
+- name: Get backstage-plugin client UUID
+  ansible.builtin.uri:
+    url: "https://{{ _keycloak_host }}/admin/realms/{{ _keycloak_realm }}/clients?clientId=backstage-plugin"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ _keycloak_token }}"
+    validate_certs: false
+  register: r_plugin_client
+  retries: 10
+  delay: 5
+  until: r_plugin_client.json | length > 0
+
+- name: Get backstage-plugin service account user
+  ansible.builtin.uri:
+    url: "https://{{ _keycloak_host }}/admin/realms/{{ _keycloak_realm }}/clients/{{ r_plugin_client.json[0].id }}/service-account-user"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ _keycloak_token }}"
+    validate_certs: false
+  register: r_sa_user
+
+- name: Get realm-management client UUID
+  ansible.builtin.uri:
+    url: "https://{{ _keycloak_host }}/admin/realms/{{ _keycloak_realm }}/clients?clientId=realm-management"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ _keycloak_token }}"
+    validate_certs: false
+  register: r_realm_mgmt_client
+
+- name: Get available realm-management roles
+  ansible.builtin.uri:
+    url: "https://{{ _keycloak_host }}/admin/realms/{{ _keycloak_realm }}/clients/{{ r_realm_mgmt_client.json[0].id }}/roles"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ _keycloak_token }}"
+    validate_certs: false
+  register: r_realm_mgmt_roles
+
+- name: Build role payload
+  ansible.builtin.set_fact:
+    _rhdh_role_payload: >-
+      {{ r_realm_mgmt_roles.json | selectattr('name', 'in', ['query-users', 'view-users', 'query-groups']) | list }}
+
+- name: Assign realm-management roles to backstage-plugin service account
+  ansible.builtin.uri:
+    url: "https://{{ _keycloak_host }}/admin/realms/{{ _keycloak_realm }}/users/{{ r_sa_user.json.id }}/role-mappings/clients/{{ r_realm_mgmt_client.json[0].id }}"
+    method: POST
+    headers:
+      Authorization: "Bearer {{ _keycloak_token }}"
+    body_format: json
+    body: "{{ _rhdh_role_payload }}"
+    validate_certs: false
+    status_code:
+      - 204
+      - 409

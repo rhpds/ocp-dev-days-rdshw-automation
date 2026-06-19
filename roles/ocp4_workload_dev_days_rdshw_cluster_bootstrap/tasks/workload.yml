@@ -89,5 +89,8 @@
 - name: Deploy app-of-apps
   ansible.builtin.include_tasks: app_of_apps.yml
 
+- name: Assign realm-management roles to backstage-plugin service account
+  ansible.builtin.include_tasks: keycloak_rhdh_roles.yml
+
 - name: Wait for all ArgoCD Applications to sync
   ansible.builtin.include_tasks: wait_for_apps.yml
