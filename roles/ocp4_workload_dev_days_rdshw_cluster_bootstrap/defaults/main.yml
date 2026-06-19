@@ -63,6 +63,17 @@ ocp4_workload_dev_days_rdshw_litellm_api_key: >-
   {{ lookup('agnosticd_user_data', 'litellm_virtual_key') | default('') }}
 
 # ------------------------------------------------
+# Red Hat Developer Hub
+# ------------------------------------------------
+
+ocp4_workload_dev_days_rdshw_developer_hub_namespace: rhdh
+
+ocp4_workload_dev_days_rdshw_keycloak_backstage_client_secret: >-
+  {{ ocp4_workload_authentication_keycloak_backstage_client_secret }}
+ocp4_workload_dev_days_rdshw_keycloak_backstage_plugin_client_secret: >-
+  {{ ocp4_workload_authentication_keycloak_backstage_plugin_client_secret }}
+
+# ------------------------------------------------
 # Vault
 # ------------------------------------------------
 

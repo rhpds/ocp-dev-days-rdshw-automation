@@ -58,6 +58,11 @@ spec:
               apiKey: "{{ ocp4_workload_dev_days_rdshw_litellm_api_key }}"
             kafka:
               userPassword: "{{ common_password }}"
+            keycloak:
+              clientId: backstage
+              clientSecret: "{{ ocp4_workload_dev_days_rdshw_keycloak_backstage_client_secret }}"
+              pluginClientId: backstage-plugin
+              pluginClientSecret: "{{ ocp4_workload_dev_days_rdshw_keycloak_backstage_plugin_client_secret }}"
 
         externalSecrets:
           name: external-secrets
@@ -98,3 +103,7 @@ spec:
           enabled: true
           name: amq-streams
           namespace: kafka
+
+        developerHub:
+          name: developer-hub
+          namespace: {{ ocp4_workload_dev_days_rdshw_developer_hub_namespace }}
