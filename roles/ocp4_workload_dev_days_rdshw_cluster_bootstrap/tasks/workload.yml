@@ -67,6 +67,10 @@
 - name: Print Access information
   agnosticd.core.agnosticd_user_info:
     data:
+      openshift_console_url: "https://{{ r_console_route.resources[0].spec.host }}"
+      openshift_api_url: "{{ r_openshift_api_server }}"
+      openshift_cluster_ingress_domain: "{{ r_openshift_subdomain }}"
+      openshift_admin_password: "{{ common_password }}"
       openshift_gitops_user: "admin"
       openshift_gitops_password: "{{ openshift_gitops_admin_password }}"
 
