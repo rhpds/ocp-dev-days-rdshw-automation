@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Red Hat GPTE
-  description: OCP4 workload for OpenShift Dev Days Roadshow cluster bootstrap
+  description: OCP4 workload for OpenShift Dev Day Roadshow cluster bootstrap
   company: Red Hat
   license: Apache-2.0
   min_ansible_version: "2.9"

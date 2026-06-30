@@ -5,7 +5,7 @@ version: 1.0.0
 readme: README.md
 authors:
   - Red Hat GPTE
-description: OpenShift Dev Days Roadshow workload collection for cluster and tenant bootstrap
+description: OpenShift Dev Day Roadshow workload collection for cluster and tenant bootstrap
 license:
   - Apache-2.0
 tags:
